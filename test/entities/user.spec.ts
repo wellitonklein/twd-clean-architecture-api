@@ -1,4 +1,4 @@
-import { User } from '../../src/entities'
+import { User } from '@/entities'
 
 describe('User domain entity', () => {
   const name = 'any_name'
