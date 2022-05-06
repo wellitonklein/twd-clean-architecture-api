@@ -4,8 +4,9 @@ import { UserData } from '../../../../src/usecases/register-user-on-mailing-list
 describe('In memory User repository', () => {
   test('should return null if user is not foud', async () => {
     const users: UserData[] = []
+    const email = 'any@mail.com'
     const userRepo = new InMemoryUserRepository(users)
-    const user = await userRepo.findUserByEmail('any@mail.com')
+    const user = await userRepo.findUserByEmail(email)
     expect(user).toBeNull()
   })
 
