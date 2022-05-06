@@ -24,4 +24,10 @@ describe('User domain entity', () => {
     const error = User.create({ name: invalidName, email })
     expect(error).toEqual(left(new InvalidNameError()))
   })
+
+  test('should create user with valid data', () => {
+    const user = User.create({ name, email }).value as User
+    expect(user.name.value).toEqual(name)
+    expect(user.email.value).toEqual(email)
+  })
 })
