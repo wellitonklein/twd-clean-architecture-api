@@ -3,7 +3,7 @@ import { InvalidNameError } from '../../entities/errors/invalid-name-error'
 import { User } from '../../entities/user'
 import { UserData } from '../../entities/user-data'
 import { Either, left, right } from '../../shared/either'
-import { UserRepository } from '../ports/user-repository'
+import { UserRepository } from './ports/user-repository'
 
 export class RegisterUserOnMailingList {
   private userRepo: UserRepository
