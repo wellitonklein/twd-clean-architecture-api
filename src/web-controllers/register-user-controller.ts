@@ -3,11 +3,13 @@ import { HttpRequest, HttpResponse } from '@/web-controllers/ports'
 import { badRequest, created, serverError } from '@/web-controllers/util'
 import { MissingParamError } from '@/web-controllers/errors'
 import { UseCase } from '@/usecases/ports'
+import { InvalidEmailError, InvalidNameError } from '@/entities/errors'
+import { Either } from '@/shared'
 
 export class RegisterUserController {
-  private readonly usecase: UseCase
+  private readonly usecase: UseCase<UserData, Either<InvalidNameError | InvalidEmailError, UserData>>
 
-  constructor (usecase: UseCase) {
+  constructor (usecase: UseCase<UserData, Either<InvalidNameError | InvalidEmailError, UserData>>) {
     this.usecase = usecase
   }
 
