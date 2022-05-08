@@ -1,5 +1,6 @@
 import { UserData } from '@/entities'
 import { InvalidEmailError, InvalidNameError } from '@/entities/errors'
+import { Either } from '@/shared'
 import { UseCase } from '@/usecases/ports'
 import { RegisterUserOnMailingList } from '@/usecases/register-user-on-mailing-list'
 import { UserRepository } from '@/usecases/register-user-on-mailing-list/ports'
@@ -11,16 +12,16 @@ import { HttpRequest } from '@/web-controllers/ports'
 describe('Register user web controller', () => {
   const users: UserData[] = []
   const repo: UserRepository = new InMemoryUserRepository(users)
-  const usecase: UseCase = new RegisterUserOnMailingList(repo)
+  const usecase = new RegisterUserOnMailingList(repo)
   const controller = new RegisterUserController(usecase)
 
-  class ErrorThrowingUseCaseStub implements UseCase {
+  class ErrorThrowingUseCaseStub implements UseCase<UserData, Either<InvalidNameError | InvalidEmailError, UserData>> {
     async perform (request: any): Promise<any> {
       throw Error()
     }
   }
 
-  const errorThrowingUseCaseStub: UseCase = new ErrorThrowingUseCaseStub()
+  const errorThrowingUseCaseStub = new ErrorThrowingUseCaseStub()
 
   test('should return status code 201 when request contains valid user data', async () => {
     const request: HttpRequest = {
