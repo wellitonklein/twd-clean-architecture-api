@@ -1,11 +1,11 @@
 import { UserData } from '@/entities'
 import { HttpRequest, HttpResponse } from '@/web-controllers/ports'
-import { badRequest, created, serverError } from '@/web-controllers/util'
+import { badRequest, ok, serverError } from '@/web-controllers/util'
 import { MissingParamError } from '@/web-controllers/errors'
 import { UseCase } from '@/usecases/ports'
-import { InvalidEmailError, InvalidNameError } from '@/entities/errors'
 import { Either } from '@/shared'
 import { MailServiceError } from '@/usecases/errors'
+import { InvalidEmailError, InvalidNameError } from '@/entities/errors'
 
 export class RegisterAndSendEmailController {
   private readonly usecase: UseCase<UserData, Either<MailServiceError | InvalidNameError | InvalidEmailError, UserData>>
@@ -29,14 +29,14 @@ export class RegisterAndSendEmailController {
         return badRequest(new MissingParamError(missingParam))
       }
 
-      const userData = request.body as UserData
+      const userData = request.body
       const response = await this.usecase.perform(userData)
 
       if (response.isLeft()) {
         return badRequest(response.value)
       }
 
-      return created(response.value)
+      return ok(response.value)
     } catch (error) {
       return serverError(error)
     }
