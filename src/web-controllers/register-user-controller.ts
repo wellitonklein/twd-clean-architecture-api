@@ -5,11 +5,12 @@ import { MissingParamError } from '@/web-controllers/errors'
 import { UseCase } from '@/usecases/ports'
 import { InvalidEmailError, InvalidNameError } from '@/entities/errors'
 import { Either } from '@/shared'
+import { MailServiceError } from '@/usecases/errors'
 
-export class RegisterUserController {
-  private readonly usecase: UseCase<UserData, Either<InvalidNameError | InvalidEmailError, UserData>>
+export class RegisterAndSendEmailController {
+  private readonly usecase: UseCase<UserData, Either<MailServiceError | InvalidNameError | InvalidEmailError, UserData>>
 
-  constructor (usecase: UseCase<UserData, Either<InvalidNameError | InvalidEmailError, UserData>>) {
+  constructor (usecase: UseCase<UserData, Either<MailServiceError | InvalidNameError | InvalidEmailError, UserData>>) {
     this.usecase = usecase
   }
 
