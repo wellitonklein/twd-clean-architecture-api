@@ -1,6 +1,5 @@
-import { User, UserData } from '@/entities'
-import { InvalidEmailError, InvalidNameError } from '@/entities/errors'
-import { Either, left } from '@/shared'
+import { User } from '@/entities'
+import { Either } from '@/shared'
 import { MailServiceError } from '@/usecases/errors'
 import { UseCase } from '@/usecases/ports'
 import { EmailOptions, EmailService } from '@/usecases/send-email/ports'
@@ -10,7 +9,7 @@ export interface SendEmailParam {
   service: EmailService
 }
 
-export class SendEmail implements UseCase<UserData, Either<MailServiceError | InvalidNameError | InvalidEmailError, EmailOptions>> {
+export class SendEmail implements UseCase<User, Either<MailServiceError, EmailOptions>> {
   private readonly options: EmailOptions
   private readonly service: EmailService
 
@@ -19,20 +18,12 @@ export class SendEmail implements UseCase<UserData, Either<MailServiceError | In
     this.service = service
   }
 
-  async perform (request: UserData): Promise<Either<MailServiceError | InvalidNameError | InvalidEmailError, EmailOptions>> {
-    const errorOrUser = User.create(request)
-
-    if (errorOrUser.isLeft()) {
-      return left(errorOrUser.value)
-    }
-
-    const user = errorOrUser.value as User
-
-    const greetings = `E aí <b>${user.name.value}</b>, beleza?`
+  async perform (request: User): Promise<Either<MailServiceError, EmailOptions>> {
+    const greetings = `E aí <b>${request.name.value}</b>, beleza?`
     const customizedHtml = `${greetings} </br></br> ${this.options.html}`
     const emailInfo: EmailOptions = {
       ...this.options,
-      to: `${user.name.value} <${user.email.value}>`,
+      to: `${request.name.value} <${request.email.value}>`,
       html: customizedHtml
     }
 
