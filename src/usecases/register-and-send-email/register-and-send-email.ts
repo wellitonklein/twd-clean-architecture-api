@@ -29,13 +29,8 @@ export class RegisterAndSendEmail implements UseCase<UserData, Either<MailServic
 
     const user = errorOrUser.value as User
 
-    const userData: UserData = {
-      name: user.name.value,
-      email: user.email.value
-    }
-
-    await this.registerUserOnMailingList.perform(userData)
-    const response = await this.sendEmail.perform(userData)
+    await this.registerUserOnMailingList.perform(user)
+    const response = await this.sendEmail.perform(user)
 
     if (response.isLeft()) {
       return left(response.value)
