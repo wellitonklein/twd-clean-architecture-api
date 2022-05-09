@@ -11,7 +11,7 @@ interface RegisterAndSendEmailParam {
   sendEmail: SendEmail
 }
 
-export class RegisterAndSendEmail implements UseCase<UserData, Either<MailServiceError | InvalidNameError | InvalidEmailError, User>> {
+export class RegisterAndSendEmail implements UseCase<UserData, Either<MailServiceError | InvalidNameError | InvalidEmailError, UserData>> {
   private registerUserOnMailingList: RegisterUserOnMailingList
   private sendEmail: SendEmail
 
@@ -20,7 +20,7 @@ export class RegisterAndSendEmail implements UseCase<UserData, Either<MailServic
     this.sendEmail = sendEmail
   }
 
-  async perform (request: UserData): Promise<Either<MailServiceError | InvalidNameError | InvalidEmailError, User>> {
+  async perform (request: UserData): Promise<Either<MailServiceError | InvalidNameError | InvalidEmailError, UserData>> {
     const errorOrUser = User.create(request)
 
     if (errorOrUser.isLeft()) {
@@ -36,6 +36,6 @@ export class RegisterAndSendEmail implements UseCase<UserData, Either<MailServic
       return left(response.value)
     }
 
-    return right(user)
+    return right(request)
   }
 }
