@@ -10,9 +10,13 @@ export class NodeMailerEmailService implements EmailService {
       const transporter = nodemailer.createTransport({
         host: options.host,
         port: options.port,
+        secure: false,
         auth: {
           user: options.username,
           pass: options.password
+        },
+        tls: {
+          rejectUnauthorized: false
         }
       })
 
@@ -23,6 +27,12 @@ export class NodeMailerEmailService implements EmailService {
         text: options.text,
         html: options.html,
         attachments: options.attachments
+      }, (error, info) => {
+        if (error) {
+          return console.error(options)
+          // return console.log(error)
+        }
+        console.log('Message sent: %s', info.messageId)
       })
 
       return right(options)

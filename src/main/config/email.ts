@@ -1,9 +1,9 @@
 import { EmailOptions } from '@/usecases/send-email/ports'
-import { join } from 'path'
 
 const attachments = [{
-  fileName: 'text.txt',
-  path: join('..', '..', 'text.txt')
+  filename: 'clean-architecture.pdf',
+  path: 'https://otaviolemos.github.io/clean-architecture.pdf',
+  contentType: 'application/pdf'
 }]
 
 export function getEmailOptions (): EmailOptions {
